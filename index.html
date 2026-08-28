@@ -1,0 +1,1770 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>عيد ميلاد مريم 🎂</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    /* =======================================================
+       ROOT VARIABLES & RESET
+    ======================================================= */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
+      background: #0a0818;
+      color: #faf2e2;
+      font-family: 'Tajawal', sans-serif;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    :root {
+      --navy-deep: #0a0818;
+      --navy: #15112b;
+      --navy-soft: #221a3d;
+      --purple: #6b46c1;
+      --purple-light: #a688e0;
+      --pink: #f0a8cf;
+      --pink-soft: #f6c9df;
+      --gold: #e9c98a;
+      --gold-soft: #f3ddb0;
+      --paper: #faf2e2;
+      --paper-edge: #eeddb8;
+      --ink: #3a2f4d;
+      --ink-soft: #6c5f82;
+      --font-display: 'Aref Ruqaa', serif;
+      --font-letter: 'Amiri', serif;
+      --font-body: 'Tajawal', sans-serif;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    /* =======================================================
+       CANVAS STARS
+    ======================================================= */
+    #stars-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse at 20% 15%, rgba(107, 70, 193, 0.25), transparent 55%),
+        radial-gradient(ellipse at 85% 75%, rgba(240, 168, 207, 0.16), transparent 55%),
+        linear-gradient(180deg, var(--navy-deep) 0%, var(--navy) 55%, var(--navy-soft) 100%);
+      pointer-events: none;
+    }
+
+    /* =======================================================
+       STAGES
+    ======================================================= */
+    .stage {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      text-align: center;
+      padding: 24px 16px;
+      padding-top: calc(40px + var(--safe-top));
+      padding-bottom: calc(24px + var(--safe-bottom));
+      z-index: 5;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.9, 0.3, 1);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
+    }
+    .stage::-webkit-scrollbar {
+      width: 0;
+    }
+    .stage.active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+    .stage.exit {
+      opacity: 0;
+      transform: translateY(-20px) scale(0.96);
+      pointer-events: none;
+    }
+
+    /* =======================================================
+       COUNTDOWN
+    ======================================================= */
+    .pre-line {
+      font-family: var(--font-display);
+      font-size: clamp(26px, 6vw, 44px);
+      color: var(--paper);
+      text-shadow: 0 0 18px rgba(240, 168, 207, 0.35);
+      margin: 0 0 8px;
+      opacity: 0;
+      animation: fadeUp 1.2s ease forwards;
+    }
+    .pre-line.sub {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: clamp(15px, 3.4vw, 19px);
+      color: var(--pink-soft);
+      animation-delay: 0.5s;
+      margin-bottom: 34px;
+    }
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .countdown {
+      display: flex;
+      gap: clamp(8px, 3vw, 22px);
+      opacity: 0;
+      animation: fadeUp 1.2s ease forwards;
+      animation-delay: 1s;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .cd-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 56px;
+    }
+    .cd-digit-wrap {
+      position: relative;
+      width: clamp(52px, 14vw, 92px);
+      height: clamp(60px, 16vw, 104px);
+      border-radius: 16px;
+      background: linear-gradient(160deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015));
+      border: 1px solid rgba(240, 215, 168, 0.28);
+      box-shadow:
+        inset 0 0 22px rgba(107, 70, 193, 0.25),
+        0 0 26px rgba(233, 201, 138, 0.05);
+      overflow: hidden;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+    .cd-digit {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-body);
+      font-weight: 900;
+      font-size: clamp(28px, 8vw, 46px);
+      color: var(--gold-soft);
+      text-shadow: 0 0 14px rgba(233, 201, 138, 0.55);
+      will-change: transform, opacity;
+    }
+    .cd-digit.out {
+      animation: digitOut 0.38s ease forwards;
+    }
+    .cd-digit.in {
+      animation: digitIn 0.5s cubic-bezier(0.2, 0.8, 0.3, 1.2) forwards;
+    }
+    @keyframes digitOut {
+      to {
+        opacity: 0;
+        transform: translateY(-14px) scale(0.85);
+        filter: blur(2px);
+      }
+    }
+    @keyframes digitIn {
+      from {
+        opacity: 0;
+        transform: scale(0.45);
+        filter: blur(3px);
+        text-shadow: 0 0 0 rgba(233, 201, 138, 0);
+      }
+      60% {
+        opacity: 1;
+        transform: scale(1.12);
+        filter: blur(0);
+        text-shadow: 0 0 22px rgba(233, 201, 138, 0.9);
+      }
+      to {
+        transform: scale(1);
+        text-shadow: 0 0 14px rgba(233, 201, 138, 0.55);
+      }
+    }
+    .cd-label {
+      margin-top: 10px;
+      font-size: clamp(10px, 2.2vw, 13px);
+      letter-spacing: 0.5px;
+      color: var(--pink-soft);
+      opacity: 0.85;
+    }
+
+    .patience-btn {
+      margin-top: 40px;
+      background: transparent;
+      border: 1px solid rgba(240, 168, 207, 0.4);
+      color: var(--pink-soft);
+      font-family: var(--font-body);
+      font-size: 14px;
+      padding: 10px 22px;
+      border-radius: 30px;
+      cursor: pointer;
+      opacity: 0;
+      animation: fadeUp 1.2s ease forwards;
+      animation-delay: 1.6s;
+      transition: background 0.3s, transform 0.2s;
+      backdrop-filter: blur(4px);
+    }
+    .patience-btn:active {
+      transform: scale(0.96);
+    }
+    .patience-btn:hover {
+      background: rgba(240, 168, 207, 0.1);
+    }
+
+    /* =======================================================
+       CELEBRATION LAYER
+    ======================================================= */
+    #celebration-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .flash-overlay {
+      position: fixed;
+      inset: 0;
+      background: #fff;
+      opacity: 0;
+      z-index: 25;
+      pointer-events: none;
+    }
+    .flash-overlay.go {
+      animation: flash 0.5s ease-out;
+    }
+    @keyframes flash {
+      0% {
+        opacity: 0;
+      }
+      12% {
+        opacity: 0.85;
+      }
+      100% {
+        opacity: 0;
+      }
+    }
+    body.shake {
+      animation: shakeScreen 0.45s ease;
+    }
+    @keyframes shakeScreen {
+      0%,
+      100% {
+        transform: translate(0, 0);
+      }
+      20% {
+        transform: translate(-6px, 3px);
+      }
+      40% {
+        transform: translate(6px, -3px);
+      }
+      60% {
+        transform: translate(-4px, -2px);
+      }
+      80% {
+        transform: translate(4px, 2px);
+      }
+    }
+
+    .confetti-piece {
+      position: absolute;
+      top: -5%;
+      will-change: transform, opacity;
+      animation-name: confettiFall;
+      animation-timing-function: ease-in;
+      animation-fill-mode: forwards;
+      pointer-events: none;
+    }
+    @keyframes confettiFall {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(112vh) rotate(540deg);
+        opacity: 0.9;
+      }
+    }
+
+    .spark-heart,
+    .spark-star {
+      position: absolute;
+      font-size: 20px;
+      opacity: 0;
+      will-change: transform, opacity;
+      animation-name: sparkPop;
+      animation-timing-function: ease-out;
+      animation-fill-mode: forwards;
+      filter: drop-shadow(0 0 6px rgba(240, 168, 207, 0.6));
+      pointer-events: none;
+    }
+    @keyframes sparkPop {
+      0% {
+        opacity: 0;
+        transform: translateY(0) scale(0.4) rotate(0deg);
+      }
+      20% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-90px) scale(1.15) rotate(30deg);
+      }
+    }
+
+    /* =======================================================
+       CELEBRATION TEXT
+    ======================================================= */
+    .celebration-text {
+      z-index: 22;
+      margin-top: 40px;
+    }
+    .celebration-text .big {
+      font-family: var(--font-display);
+      font-size: clamp(30px, 7vw, 54px);
+      color: var(--gold-soft);
+      text-shadow: 0 0 26px rgba(233, 201, 138, 0.55);
+      margin: 0 0 12px;
+      opacity: 0;
+    }
+    .celebration-text .small {
+      font-size: clamp(15px, 3.4vw, 19px);
+      color: var(--pink-soft);
+      opacity: 0;
+    }
+    .celebration-text.reveal .big {
+      animation: fadeUp 1s ease forwards;
+    }
+    .celebration-text.reveal .small {
+      animation: fadeUp 1s ease forwards;
+      animation-delay: 0.5s;
+    }
+
+    .gift-btn {
+      margin-top: 36px;
+      background: linear-gradient(135deg, var(--purple), var(--pink));
+      border: none;
+      color: #1c1330;
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 15px;
+      padding: 13px 30px;
+      border-radius: 32px;
+      cursor: pointer;
+      box-shadow: 0 6px 22px rgba(240, 168, 207, 0.3);
+      opacity: 0;
+      animation: fadeUp 1s ease forwards;
+      animation-delay: 1.1s;
+      transition: transform 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .gift-btn:active {
+      transform: scale(0.95);
+    }
+    .gift-btn:hover {
+      transform: scale(1.02);
+    }
+
+    /* =======================================================
+       PAPER (LETTERS)
+    ======================================================= */
+    .paper-stage {
+      position: relative;
+      justify-content: flex-start !important;
+      padding-top: calc(30px + var(--safe-top)) !important;
+      align-items: center !important;
+    }
+
+    .paper {
+      position: relative;
+      width: min(560px, 90vw);
+      background: linear-gradient(180deg, var(--paper), var(--paper-edge));
+      border-radius: 14px;
+      padding: clamp(26px, 5vw, 46px) clamp(20px, 5vw, 40px);
+      box-shadow:
+        0 30px 60px rgba(0, 0, 0, 0.45),
+        0 0 0 1px rgba(233, 201, 138, 0.4),
+        inset 0 0 40px rgba(233, 201, 138, 0.12);
+      color: var(--ink);
+      transform-origin: top center;
+      opacity: 0;
+      transform: translateY(30px) scaleY(0.85);
+      margin: 0 auto;
+      transition: background 0.8s ease, color 0.8s ease, box-shadow 0.8s ease, opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .paper-alt {
+      background: linear-gradient(180deg, #f5e6d3, #e8d5c4) !important;
+      color: #2c1810 !important;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(200, 150, 120, 0.4), inset 0 0 40px rgba(200, 150, 120, 0.15) !important;
+    }
+
+    .paper-alt .ornament {
+      color: #8b5e3c !important;
+    }
+    .paper-alt p {
+      color: #2c1810 !important;
+    }
+    .paper-alt .word {
+      color: #2c1810 !important;
+    }
+
+    .paper.opening {
+      animation: paperOpen 0.9s cubic-bezier(0.2, 0.7, 0.25, 1) forwards;
+    }
+    .paper.leaving {
+      animation: paperLeave 0.6s ease forwards;
+    }
+    @keyframes paperOpen {
+      0% {
+        opacity: 0;
+        transform: translateY(40px) scaleY(0.7);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scaleY(1);
+      }
+    }
+    @keyframes paperLeave {
+      to {
+        opacity: 0;
+        transform: translateX(-60px) rotate(-4deg);
+      }
+    }
+
+    .paper .ornament {
+      display: block;
+      text-align: center;
+      font-size: 26px;
+      color: var(--gold);
+      margin-bottom: 6px;
+      opacity: 0.8;
+      font-family: var(--font-display);
+    }
+    .paper .ornament.bottom {
+      margin-top: 16px;
+      margin-bottom: 0;
+    }
+    .paper p {
+      font-family: var(--font-letter);
+      font-size: clamp(17px, 3.6vw, 21px);
+      line-height: 2;
+      margin: 0 0 16px;
+      color: var(--ink);
+    }
+    .paper .word {
+      opacity: 0;
+      display: inline-block;
+      filter: blur(2px);
+      transform: translateY(4px);
+    }
+    .paper .word.show {
+      animation: wordIn 0.45s ease forwards;
+    }
+    @keyframes wordIn {
+      to {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(0);
+      }
+    }
+
+    .side-tab {
+      display: none !important;
+    }
+
+    /* =======================================================
+       ROSE STAGE
+    ======================================================= */
+    .rose-hint {
+      font-family: var(--font-display);
+      font-size: clamp(18px, 4vw, 24px);
+      color: var(--pink-soft);
+      margin-bottom: 34px;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards;
+      transition: opacity 0.6s ease;
+      margin-top: 40px;
+    }
+    .rose-wrap {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards;
+      animation-delay: 0.3s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .rose-emoji {
+      font-size: 88px;
+      filter: grayscale(0.35) brightness(0.8) drop-shadow(0 0 18px rgba(240, 168, 207, 0.25));
+      transition: transform 0.3s;
+      animation: roseFloat 3.5s ease-in-out infinite;
+      user-select: none;
+    }
+    .rose-wrap:hover .rose-emoji {
+      transform: scale(1.06);
+    }
+    @keyframes roseFloat {
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+    .rose-wrap.bloom .rose-emoji {
+      animation: roseBloom 1.1s cubic-bezier(0.2, 0.7, 0.3, 1.2) forwards;
+    }
+    @keyframes roseBloom {
+      0% {
+        filter: grayscale(0.35) brightness(0.8);
+        transform: scale(1) rotate(0deg);
+      }
+      55% {
+        filter: grayscale(0) brightness(1.15) drop-shadow(0 0 30px rgba(240, 168, 207, 0.7));
+        transform: scale(1.35) rotate(-6deg);
+      }
+      100% {
+        filter: grayscale(0) brightness(1.05) drop-shadow(0 0 22px rgba(240, 168, 207, 0.5));
+        transform: scale(1.15) rotate(0deg);
+      }
+    }
+    .rose-tap-label {
+      position: absolute;
+      bottom: -30px;
+      font-size: 12px;
+      color: var(--pink-soft);
+      opacity: 0.7;
+      transition: opacity 0.5s ease;
+    }
+    .rose-tap-label.hidden {
+      opacity: 0 !important;
+    }
+
+    /* =======================================================
+       SONG / KARAOKE
+    ======================================================= */
+    .song-box {
+      width: min(560px, 90vw);
+      margin: 8px auto 18px;
+    }
+    .song-title {
+      font-family: var(--font-display);
+      font-size: clamp(24px, 5.5vw, 34px);
+      color: var(--gold-soft);
+      text-shadow: 0 0 22px rgba(233, 201, 138, 0.6);
+      margin: 0 0 18px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards;
+    }
+    .song-lyrics {
+      min-height: 40px;
+    }
+    .song-line {
+      font-family: var(--font-letter);
+      font-size: clamp(19px, 4.6vw, 27px);
+      line-height: 1.8;
+      margin: 0 0 10px;
+      color: var(--pink-soft);
+      opacity: 0;
+      transform: scale(0.85);
+      filter: blur(3px);
+      transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.2, 0.7, 0.3, 1.3), filter 0.35s ease, color 0.35s ease;
+    }
+    .song-line.active {
+      opacity: 1;
+      transform: scale(1.05);
+      filter: blur(0);
+      color: var(--gold-soft);
+      text-shadow: 0 0 20px rgba(233, 201, 138, 0.6);
+    }
+    .song-line.sung {
+      opacity: 0.55;
+      transform: scale(0.96);
+      filter: blur(0);
+      color: var(--pink-soft);
+      text-shadow: none;
+    }
+
+    /* =======================================================
+       FINAL MESSAGE
+    ======================================================= */
+    .final-message {
+      margin-top: 26px;
+      width: min(560px, 90vw);
+    }
+    .final-message p {
+      font-family: var(--font-letter);
+      font-size: clamp(18px, 3.8vw, 23px);
+      line-height: 2;
+      color: var(--paper);
+      text-shadow: 0 0 12px rgba(233, 201, 138, 0.25);
+    }
+    .final-message .word {
+      opacity: 0;
+      display: inline-block;
+      filter: blur(2px);
+      transform: translateY(4px);
+    }
+    .final-message .word.show {
+      animation: wordIn 0.45s ease forwards;
+    }
+
+    .final-tag {
+      margin-top: 24px;
+      font-size: 14px;
+      color: var(--gold-soft);
+      opacity: 0;
+    }
+    .final-tag.show {
+      animation: fadeUp 1.4s ease forwards;
+    }
+
+    /* =======================================================
+       SOUND TOGGLE
+    ======================================================= */
+    #sound-toggle {
+      position: fixed;
+      top: calc(16px + var(--safe-top));
+      left: calc(16px + env(safe-area-inset-left, 0px));
+      z-index: 50;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(240, 215, 168, 0.3);
+      color: var(--gold-soft);
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: background 0.3s, transform 0.2s;
+      -webkit-tap-highlight-color: transparent;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    #sound-toggle:active {
+      transform: scale(0.92);
+    }
+    #sound-toggle:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* =======================================================
+       RESTART BUTTON
+    ======================================================= */
+    .restart-btn {
+      position: fixed;
+      bottom: calc(20px + var(--safe-bottom));
+      right: calc(20px + env(safe-area-inset-right, 0px));
+      z-index: 40;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(240, 215, 168, 0.2);
+      color: var(--gold-soft);
+      font-family: var(--font-body);
+      font-size: 12px;
+      padding: 8px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      transition: background 0.3s, transform 0.2s;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .restart-btn.show {
+      opacity: 0.7;
+      pointer-events: auto;
+    }
+    .restart-btn:active {
+      transform: scale(0.92);
+    }
+    .restart-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      opacity: 1;
+    }
+
+    /* =======================================================
+       RESPONSIVE
+    ======================================================= */
+    @media (max-width: 420px) {
+      .cd-unit {
+        min-width: 48px;
+      }
+      .cd-digit-wrap {
+        width: clamp(46px, 13vw, 64px);
+        height: clamp(52px, 15vw, 72px);
+      }
+      .paper-stage {
+        padding-top: calc(20px + var(--safe-top)) !important;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .countdown {
+        gap: 4px;
+      }
+      .cd-unit {
+        min-width: 40px;
+      }
+      .cd-digit-wrap {
+        width: clamp(38px, 12vw, 52px);
+        height: clamp(44px, 14vw, 60px);
+      }
+      .cd-label {
+        font-size: 9px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="stars-canvas"></canvas>
+  <button id="sound-toggle" aria-label="كتم / تشغيل الصوت">🔊</button>
+  <button class="restart-btn" id="restart-btn" aria-label="إعادة الهدية">🔄 إعادة</button>
+
+  <!-- ===== STAGE 1: COUNTDOWN ===== -->
+  <section class="stage active" id="stage-countdown">
+    <p class="pre-line" id="pre-line-name"></p>
+    <p class="pre-line sub" id="pre-line-sub">عاملك حاجه صغيره يروحي 🥺♥️</p>
+    <div class="countdown">
+      <div class="cd-unit"><div class="cd-digit-wrap" id="cd-days"></div><span class="cd-label">يوم</span></div>
+      <div class="cd-unit"><div class="cd-digit-wrap" id="cd-hours"></div><span class="cd-label">ساعة</span></div>
+      <div class="cd-unit"><div class="cd-digit-wrap" id="cd-minutes"></div><span class="cd-label">دقيقة</span></div>
+      <div class="cd-unit"><div class="cd-digit-wrap" id="cd-seconds"></div><span class="cd-label">ثانية</span></div>
+    </div>
+    <button class="patience-btn" id="patience-btn">تبقي القليل علي احلي يوم في حياتك 🥺❤️</button>
+  </section>
+
+  <!-- ===== CELEBRATION LAYER ===== -->
+  <div class="flash-overlay" id="flash"></div>
+  <div id="celebration-layer"></div>
+
+  <!-- ===== STAGE 2: CELEBRATION ===== -->
+  <section class="stage" id="stage-celebration">
+    <div class="celebration-text" id="celebration-text">
+      <p class="big" id="celeb-big"></p>
+      <p class="small" id="celeb-small">تقدري تفتحي الهديه يقلبي دلوقتي 🥺❤️</p>
+    </div>
+    <button class="gift-btn" id="to-letter1-btn">فتح الهديه 🎁</button>
+  </section>
+
+  <!-- ===== STAGE 3: LETTER 1 ===== -->
+  <section class="stage paper-stage" id="stage-letter1">
+    <div class="paper" id="paper1"></div>
+  </section>
+
+  <!-- ===== STAGE 4: LETTER 2 (مخفي) ===== -->
+  <section class="stage paper-stage" id="stage-letter2" style="display:none;">
+    <div class="paper" id="paper2"></div>
+  </section>
+
+  <!-- ===== STAGE 5: ROSE + SONG + FINAL ===== -->
+  <section class="stage" id="stage-rose">
+    <p class="rose-hint" id="rose-hint">آخر حاجة... ودي لازم تفتحيها بنفسك 🥹</p>
+    <div class="rose-wrap" id="rose-wrap">
+      <span class="rose-emoji">🌹</span>
+      <span class="rose-tap-label" id="rose-tap-label">اضغطي عليها 💗</span>
+    </div>
+    <div class="song-box" id="song-box" style="display:none;">
+      <p class="song-title">🎶 أغنية مريم</p>
+      <div class="song-lyrics" id="song-lyrics"></div>
+    </div>
+    <div class="final-message" id="final-message"></div>
+    <p class="final-tag" id="final-tag">دي كانت الهدية... بس الحكاية لسه مخلصتش بنا ❤️</p>
+  </section>
+
+  <script>
+    "use strict";
+
+    /* ===============================================================
+       🎯  CONFIG - تم إزالة ملفات الصوت الخارجية
+       =============================================================== */
+    const CONFIG = {
+      name: 'مريم',
+      targetDate: '2026-08-29T20:00:00',
+      demoMode: true,
+      wordDelay: 380,
+      enableStars: true,
+      enableConfetti: true,
+      enableShake: true
+    };
+
+    /* ===============================================================
+       📦  DATA - تم تعديل النصوص وإزالة العلامات (. ،)
+       =============================================================== */
+    const DATA = {
+      letter1: `عايز اقولك يروح قلبي اني 🥺❤️
+
+كل يوم بحبك أكتر من اليوم اللي قبله وحبي ليكي مش مجرد كلام هو حاجة بيعيشها قلبي من جوايا
+كل يوم بتمنى من ربنا إننا ما نبعدش عن بعض أبداً ونفضل سوا العمر كله لأنك بقيتي جزء كبير من حياتي ومش سهل أتخيل يوم من غيرك 💗
+
+انا بحبك يا مريم عمري ما اتخيل حياتي من غيرك 
+عارف ان ممكن معرفش اوصف كلامي بس بجد بحبك من قلبي 💗
+
+وبتمنى من قلبي إننا نفضل سوا مهما حصل ومهما قابلتنا ظروف أو مشاكل نفسي دايمًا نفضل متمسكين ببعض ونعدي أي حاجة مع بعض 🥺❤️
+
+أنتِ مش مجرد حبيبتي أنتِ نصي التاني والإنسانة اللي وجودها في حياتي بيفرق معايا جداً
+ربنا يخليكي ليا يا مريم وما يحرمنيش منك أبداً 🌹`,
+
+      letter2: `كل سنه وأنتي حبيبتي كل سنه وأنتي سعادتي في الدنيا وكل سنه وأنا شايف الدنيا أجمل بوجودك
+كل سنه وحبنا يزيد وكل سنه وإنتي دنيتي وفرحة قلبي وسبب كل حاجه حلوه في حياتي 🌚💗
+
+إنتي أغلى حاجة عندي يا مريم وكنت نفسي أهديكي حاجة في يوم زي ده لكن مهما كانت الهدية مش هتقدر توصف مكانتك عندي ولا تعبر عن قد إيه أنتِ مميزة في حياتي
+عشان كده كل اللي أقدر أقدمهولك هو قلبي وحبي واهتمامي وكل حاجة حلوة أقدر أعملها عشانك لأنك تستاهلي كل الخير 🥺💗
+
+وجودك في حياتي بقى له معنى كبير جداً وبقيتي من أهم وأغلى الناس عندي ومش مجرد حد بحبه لكنك الشخص اللي بيعني ليه الدنيا كلها
+بحبك في يوم عيد ميلادك وبحبك في كل يوم وبتمنى ربنا يديمنا لبعض وما يحرمنيش منك 🥹💗`,
+
+      songLines: [
+        { time: 0, text: 'كل سنة يا حبيبتي وإنتي عيدي 🥹💗' },
+        { time: 3, text: 'كل سنة وقلبي ليكي يا سيدي 🌚💗' },
+        { time: 6, text: 'أوعي إيدك يوم تسيب إيدي 🫠' },
+        { time: 9, text: 'كل سنة وأنا وإنتي لبعض 🐣' },
+        { time: 12, text: 'مهما نزعل ومهما نتخانق 🙃💗' },
+        { time: 15, text: 'ولا من بعض يوم نضايق 🥹' },
+        { time: 18, text: 'عمرنا ما نفكر نتفارق 🥺💗' },
+        { time: 21, text: 'وعمرنا ما نخون الوعود 🌚' },
+        { time: 24, text: 'كل سنة وإنتي بخير يا قلبي 💗' }
+      ],
+
+      finalMessage: `مريم كل سنة وإنتِ طيبة يا حبيبتي 🥺❤️
+كل سنة وضحكتك هي أجمل حاجة في الدنيا وكل سنة وأنا بدعي ربنا يخليك ليا ويسعدك دايماً
+
+اتمني السنه دي تحققي الي نفسك فيه يقلبي و متيأسيش من اي حاجه علشان واثق فيكي انك قدها و هتكوني حاجه كبيره في المستقبل يروحي 🥹❤️
+وخليكي فاكرة دايماً إنك مش لوحدك وإن أنا موجود علشانك ولو الدنيا ضاقت بيكي افتكري إنك دايمًا عندك شخص بيحبك بصدق ومستعد يعمل أي حاجة عشانك 🥹♥️
+
+أتمنى إحنا نفضل سوا دايمًا ونعدي مع بعض أي حاجة لأنك بالنسبة لي مش مجرد حب انتِ انتي حياتي كلها البيت والأمان و مراتي مستقبلا 😘🌹
+كل سنه و انتي طيبه يقلبي و ينعاد علينا ديما بالخير و قلوبنا نع بعض ربنا يخليكي ليا يا اخلي حاجه في الدنيا 🌚💗`
+    };
+
+    /* ===============================================================
+       🚀  MAIN APP
+       =============================================================== */
+
+    // ============================================================
+    //  UTILITIES
+    // ============================================================
+    const Utils = {
+      sleep: ms => new Promise(r => setTimeout(r, ms)),
+      getEl: id => document.getElementById(id),
+      qs: (sel, ctx = document) => ctx.querySelector(sel),
+      qsa: (sel, ctx = document) => [...ctx.querySelectorAll(sel)],
+      clamp: (v, min, max) => Math.min(max, Math.max(min, v)),
+      isReducedMotion: () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+      now: () => new Date(),
+      parseDate: str => new Date(str),
+      pad: n => String(n).padStart(2, '0'),
+      scrollToTop: el => { if (el) el.scrollTo({ top: 0, behavior: 'instant' }); }
+    };
+
+    // ============================================================
+    //  DOM REFS
+    // ============================================================
+    const DOM = {
+      stages: Utils.qsa('.stage'),
+      countdown: Utils.getEl('stage-countdown'),
+      celebration: Utils.getEl('stage-celebration'),
+      letter1: Utils.getEl('stage-letter1'),
+      letter2: Utils.getEl('stage-letter2'),
+      rose: Utils.getEl('stage-rose'),
+      paper1: Utils.getEl('paper1'),
+      paper2: Utils.getEl('paper2'),
+      cdDays: Utils.getEl('cd-days'),
+      cdHours: Utils.getEl('cd-hours'),
+      cdMinutes: Utils.getEl('cd-minutes'),
+      cdSeconds: Utils.getEl('cd-seconds'),
+      celebText: Utils.getEl('celebration-text'),
+      celebBig: Utils.getEl('celeb-big'),
+      celebSmall: Utils.getEl('celeb-small'),
+      flash: Utils.getEl('flash'),
+      layer: Utils.getEl('celebration-layer'),
+      roseWrap: Utils.getEl('rose-wrap'),
+      roseHint: Utils.getEl('rose-hint'),
+      roseLabel: Utils.getEl('rose-tap-label'),
+      songBox: Utils.getEl('song-box'),
+      songLyrics: Utils.getEl('song-lyrics'),
+      finalMsg: Utils.getEl('final-message'),
+      finalTag: Utils.getEl('final-tag'),
+      soundToggle: Utils.getEl('sound-toggle'),
+      restartBtn: Utils.getEl('restart-btn'),
+      preName: Utils.getEl('pre-line-name'),
+      patienceBtn: Utils.getEl('patience-btn'),
+      toLetter1: Utils.getEl('to-letter1-btn')
+    };
+
+    // ============================================================
+    //  STAGE MANAGER
+    // ============================================================
+    const StageManager = {
+      current: null,
+      history: [],
+
+      goTo(id, options = {}) {
+        const { scrollTop = true, exitPrev = true } = options;
+        const target = Utils.getEl(id);
+        if (!target) return;
+
+        DOM.stages.forEach(s => {
+          s.classList.remove('active', 'exit');
+          if (exitPrev && s !== target) s.classList.add('exit');
+        });
+
+        target.classList.remove('exit');
+        target.classList.add('active');
+        this.current = id;
+        this.history.push(id);
+
+        if (scrollTop) {
+          requestAnimationFrame(() => {
+            Utils.scrollToTop(target);
+          });
+        }
+      },
+
+      reset() {
+        DOM.stages.forEach(s => {
+          s.classList.remove('active', 'exit');
+        });
+        this.history = [];
+        this.current = null;
+      }
+    };
+
+    // ============================================================
+    //  AUDIO MANAGER - يعمل بدون ملفات خارجية
+    // ============================================================
+    const AudioManager = {
+      ctx: null,
+      muted: false,
+      initialized: false,
+      songInterval: null,
+      isSongPlaying: false,
+      melodyInterval: null,
+
+      init() {
+        if (this.initialized) return;
+        try {
+          const AC = window.AudioContext || window.webkitAudioContext;
+          if (AC) this.ctx = new AC();
+        } catch (_) { /* ignore */ }
+
+        const saved = localStorage.getItem('muted');
+        if (saved === 'true') this.muted = true;
+        this.updateUI();
+        this.initialized = true;
+      },
+
+      updateUI() {
+        DOM.soundToggle.textContent = this.muted ? '🔇' : '🔊';
+      },
+
+      toggleMute() {
+        this.muted = !this.muted;
+        localStorage.setItem('muted', String(this.muted));
+        this.updateUI();
+        if (!this.muted && this.isSongPlaying) {
+          this.resumeSong();
+        }
+      },
+
+      // تشغيل نغمة واحدة
+      playTone(freq, duration, type = 'sine', gain = 0.05) {
+        if (this.muted || !this.ctx) return;
+        try {
+          const osc = this.ctx.createOscillator();
+          const g = this.ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+          g.gain.setValueAtTime(0.0001, this.ctx.currentTime);
+          g.gain.exponentialRampToValueAtTime(gain, this.ctx.currentTime + 0.02);
+          g.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+          osc.connect(g).connect(this.ctx.destination);
+          osc.start();
+          osc.stop(this.ctx.currentTime + duration + 0.05);
+        } catch (_) { /* ignore */ }
+      },
+
+      // تشغيل لحن احتفالي قصير
+      playCelebration() {
+        if (this.muted || !this.ctx) return;
+        const notes = [523, 659, 784, 1047, 784, 659, 523];
+        notes.forEach((f, i) => {
+          setTimeout(() => this.playTone(f, 0.2, 'triangle', 0.06), i * 120);
+        });
+      },
+
+      // تشغيل لحن أغنية عيد ميلاد متكرر (موسيقى شعبية)
+      playBirthdaySong(onTimeUpdate) {
+        if (this.muted || !this.ctx) {
+          // حتى لو مكتوم، نرسل التحديثات الزمنية
+          if (onTimeUpdate) {
+            let t = 0;
+            this.songInterval = setInterval(() => {
+              t += 0.5;
+              onTimeUpdate(t);
+              if (t > 30) {
+                clearInterval(this.songInterval);
+                this.songInterval = null;
+                this.isSongPlaying = false;
+              }
+            }, 500);
+          }
+          return;
+        }
+
+        this.isSongPlaying = true;
+        const melody = [
+          523, 587, 659, 784, 659, 587, 523, 659,
+          784, 880, 784, 659, 523, 659, 784, 880,
+          988, 880, 784, 659, 784, 880, 988, 1047,
+          988, 880, 784, 659, 523, 659, 784, 880
+        ];
+
+        let noteIndex = 0;
+        const beatDuration = 300; // مللي
+
+        if (this.melodyInterval) clearInterval(this.melodyInterval);
+
+        let elapsed = 0;
+
+        this.melodyInterval = setInterval(() => {
+          if (this.muted) {
+            // إذا تم كتم الصوت نوقف اللحن
+            return;
+          }
+          const note = melody[noteIndex % melody.length];
+          // نغمة رئيسية
+          this.playTone(note, 0.25, 'triangle', 0.04);
+          // نغمة ثانوية (باس)
+          if (noteIndex % 2 === 0) {
+            this.playTone(note / 2, 0.3, 'sine', 0.02);
+          }
+
+          noteIndex++;
+          elapsed += beatDuration / 1000;
+
+          // تحديث الكلمات حسب الوقت
+          if (onTimeUpdate) {
+            onTimeUpdate(elapsed);
+          }
+
+          // بعد 30 ثانية نوقف
+          if (elapsed > 30) {
+            clearInterval(this.melodyInterval);
+            this.melodyInterval = null;
+            this.isSongPlaying = false;
+          }
+        }, beatDuration);
+      },
+
+      resumeSong() {
+        // إعادة تشغيل اللحن إذا كان متوقف
+        if (this.melodyInterval) {
+          clearInterval(this.melodyInterval);
+          this.melodyInterval = null;
+        }
+        this.playBirthdaySong(null);
+      },
+
+      stopBirthdaySong() {
+        this.isSongPlaying = false;
+        if (this.melodyInterval) {
+          clearInterval(this.melodyInterval);
+          this.melodyInterval = null;
+        }
+        if (this.songInterval) {
+          clearInterval(this.songInterval);
+          this.songInterval = null;
+        }
+      },
+
+      playGentleChime() {
+        if (this.muted || !this.ctx) return;
+        this.playTone(520, 0.3, 'sine', 0.025);
+      }
+    };
+
+    // ============================================================
+    //  STARS
+    // ============================================================
+    const Stars = {
+      canvas: null,
+      ctx: null,
+      stars: [],
+      running: true,
+      init() {
+        if (!CONFIG.enableStars) return;
+        this.canvas = Utils.getEl('stars-canvas');
+        if (!this.canvas) return;
+        this.ctx = this.canvas.getContext('2d');
+        this.resize();
+        window.addEventListener('resize', () => this.resize());
+        document.addEventListener('visibilitychange', () => {
+          if (document.hidden) {
+            this.running = false;
+          } else {
+            this.running = true;
+            this.animate();
+          }
+        });
+        this.animate();
+      },
+
+      resize() {
+        if (!this.canvas) return;
+        const w = this.canvas.width = window.innerWidth;
+        const h = this.canvas.height = window.innerHeight;
+        const count = Math.floor((w * h) / 12000);
+        this.stars = Array.from({ length: Math.min(count, 120) }, () => ({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          r: Math.random() * 1.4 + 0.3,
+          phase: Math.random() * Math.PI * 2,
+          speed: Math.random() * 0.015 + 0.005
+        }));
+      },
+
+      animate() {
+        if (!this.running || !this.ctx) return;
+        const w = this.canvas.width;
+        const h = this.canvas.height;
+        this.ctx.clearRect(0, 0, w, h);
+        const t = performance.now() / 1000;
+        for (const s of this.stars) {
+          const twinkle = 0.5 + 0.5 * Math.sin(t * s.speed + s.phase);
+          this.ctx.beginPath();
+          this.ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          this.ctx.fillStyle = `rgba(240,225,255,${0.2 + twinkle * 0.5})`;
+          this.ctx.fill();
+        }
+        requestAnimationFrame(() => this.animate());
+      }
+    };
+
+    // ============================================================
+    //  EFFECTS
+    // ============================================================
+    const Effects = {
+      colors: ['#e9c98a', '#f0a8cf', '#a688e0', '#f6c9df', '#6b46c1', '#faf2e2'],
+
+      confetti(count = 70) {
+        if (!CONFIG.enableConfetti) return;
+        const layer = DOM.layer;
+        for (let i = 0; i < count; i++) {
+          const piece = document.createElement('div');
+          piece.className = 'confetti-piece';
+          const size = 6 + Math.random() * 8;
+          const isCircle = Math.random() > 0.5;
+          piece.style.left = Math.random() * 100 + 'vw';
+          piece.style.width = size + 'px';
+          piece.style.height = (isCircle ? size : size * 1.6) + 'px';
+          piece.style.background = this.colors[Math.floor(Math.random() * this.colors.length)];
+          piece.style.borderRadius = isCircle ? '50%' : '2px';
+          const duration = 2.6 + Math.random() * 2.2;
+          const delay = Math.random() * 0.5;
+          piece.style.animationDuration = duration + 's';
+          piece.style.animationDelay = delay + 's';
+          layer.appendChild(piece);
+          setTimeout(() => piece.remove(), (duration + delay) * 1000 + 200);
+        }
+      },
+
+      sparkles(count = 26) {
+        const layer = DOM.layer;
+        const glyphs = ['💖', '✨', '⭐', '💫', '💕'];
+        for (let i = 0; i < count; i++) {
+          const el = document.createElement('div');
+          const isHeart = Math.random() > 0.4;
+          el.className = isHeart ? 'spark-heart' : 'spark-star';
+          el.textContent = glyphs[Math.floor(Math.random() * glyphs.length)];
+          el.style.left = 30 + Math.random() * 40 + 'vw';
+          el.style.top = 35 + Math.random() * 30 + 'vh';
+          const duration = 1.4 + Math.random() * 1.2;
+          const delay = Math.random() * 0.8;
+          el.style.animationDuration = duration + 's';
+          el.style.animationDelay = delay + 's';
+          layer.appendChild(el);
+          setTimeout(() => el.remove(), (duration + delay) * 1000 + 200);
+        }
+      },
+
+      shake() {
+        if (!CONFIG.enableShake) return;
+        document.body.classList.add('shake');
+        setTimeout(() => document.body.classList.remove('shake'), 500);
+      },
+
+      flash() {
+        DOM.flash.classList.add('go');
+        setTimeout(() => DOM.flash.classList.remove('go'), 550);
+      },
+
+      clearAll() {
+        DOM.layer.innerHTML = '';
+        DOM.flash.classList.remove('go');
+        document.body.classList.remove('shake');
+      }
+    };
+
+    // ============================================================
+    //  COUNTDOWN
+    // ============================================================
+    const Countdown = {
+      target: null,
+      interval: null,
+      done: false,
+      prev: { days: null, hours: null, minutes: null, seconds: null },
+
+      init() {
+        let dateStr = CONFIG.targetDate;
+        if (CONFIG.demoMode) {
+          const d = new Date();
+          d.setSeconds(d.getSeconds() + 10);
+          dateStr = d.toISOString();
+        }
+        this.target = Utils.parseDate(dateStr);
+        if (isNaN(this.target.getTime())) {
+          console.warn('تاريخ غير صحيح، استخدام تاريخ افتراضي');
+          const d = new Date();
+          d.setDate(d.getDate() + 1);
+          this.target = d;
+        }
+        DOM.preName.textContent = `${CONFIG.name}... استنى شوية ❤️`;
+        this.tick();
+        this.interval = setInterval(() => this.tick(), 1000);
+      },
+
+      tick() {
+        const now = Utils.now();
+        let diff = Math.max(0, this.target.getTime() - now.getTime());
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+
+        this.render(DOM.cdDays, days, this.prev.days);
+        this.render(DOM.cdHours, hours, this.prev.hours);
+        this.render(DOM.cdMinutes, minutes, this.prev.minutes);
+        this.render(DOM.cdSeconds, seconds, this.prev.seconds);
+
+        this.prev.days = days;
+        this.prev.hours = hours;
+        this.prev.minutes = minutes;
+        this.prev.seconds = seconds;
+
+        if (diff <= 0 && !this.done) {
+          this.done = true;
+          clearInterval(this.interval);
+          setTimeout(() => Celebration.trigger(), 350);
+        }
+      },
+
+      render(el, value, prevValue) {
+        const text = Utils.pad(value);
+        if (prevValue === null) {
+          const span = document.createElement('span');
+          span.className = 'cd-digit in';
+          span.textContent = text;
+          el.innerHTML = '';
+          el.appendChild(span);
+          return;
+        }
+        if (Utils.pad(prevValue) === text) return;
+        const old = el.querySelector('.cd-digit');
+        if (old) {
+          old.classList.remove('in');
+          old.classList.add('out');
+        }
+        const span = document.createElement('span');
+        span.className = 'cd-digit in';
+        span.textContent = text;
+        el.appendChild(span);
+        setTimeout(() => { if (old) old.remove(); }, 420);
+      },
+
+      destroy() {
+        if (this.interval) clearInterval(this.interval);
+      }
+    };
+
+    // ============================================================
+    //  CELEBRATION
+    // ============================================================
+    const Celebration = {
+      triggered: false,
+
+      trigger() {
+        if (this.triggered) return;
+        this.triggered = true;
+        StageManager.goTo('stage-celebration');
+
+        Effects.flash();
+        Effects.shake();
+        Effects.confetti(80);
+        Effects.sparkles(28);
+        setTimeout(() => Effects.confetti(40), 700);
+        setTimeout(() => Effects.sparkles(16), 1100);
+
+        AudioManager.playCelebration();
+
+        DOM.celebBig.textContent = `كل سنة وإنتِ طيبة يا ${CONFIG.name} ❤️🎉`;
+        DOM.celebSmall.textContent = 'أهو كده ينفع نبدأ الهدية بقى 😂❤️';
+        setTimeout(() => DOM.celebText.classList.add('reveal'), 900);
+      },
+
+      reset() {
+        this.triggered = false;
+        DOM.celebText.classList.remove('reveal');
+      }
+    };
+
+    // ============================================================
+    //  LETTERS
+    // ============================================================
+    const Letters = {
+      active: null,
+
+      open(container, text, options = {}) {
+        const { onDone, speed = CONFIG.wordDelay, altStyle = false } = options;
+
+        this.close();
+
+        container.innerHTML = '';
+        container.classList.remove('leaving');
+        container.classList.add('opening');
+
+        if (altStyle) {
+          container.classList.add('paper-alt');
+        } else {
+          container.classList.remove('paper-alt');
+        }
+
+        const paragraphs = text.split('\n\n');
+        const allSpans = [];
+        let revealTimer = null;
+
+        paragraphs.forEach((para) => {
+          const p = document.createElement('p');
+          const lines = para.split('\n');
+          lines.forEach((line, li) => {
+            const words = line.split(' ').filter(w => w.length > 0);
+            words.forEach(word => {
+              const span = document.createElement('span');
+              span.className = 'word';
+              span.textContent = word;
+              p.appendChild(span);
+              p.appendChild(document.createTextNode(' '));
+              allSpans.push(span);
+            });
+            if (li < lines.length - 1) p.appendChild(document.createElement('br'));
+          });
+          container.appendChild(p);
+        });
+
+        const topOrn = document.createElement('span');
+        topOrn.className = 'ornament';
+        topOrn.textContent = '❦';
+        container.prepend(topOrn);
+
+        const bottomOrn = document.createElement('span');
+        bottomOrn.className = 'ornament bottom';
+        bottomOrn.textContent = '❦';
+        container.appendChild(bottomOrn);
+
+        let i = 0;
+        let isRevealing = true;
+
+        function revealNext() {
+          if (!isRevealing) return;
+          if (i >= allSpans.length) {
+            if (onDone) onDone();
+            return;
+          }
+          const span = allSpans[i];
+          span.classList.add('show');
+          if (i === 0) AudioManager.playGentleChime();
+          autoScrollToWord(span);
+          i++;
+          revealTimer = setTimeout(revealNext, speed);
+        }
+
+        function autoScrollToWord(span) {
+          const stage = span.closest('.stage');
+          if (!stage) return;
+          const stageRect = stage.getBoundingClientRect();
+          const spanRect = span.getBoundingClientRect();
+          const margin = 48;
+          if (spanRect.bottom > stageRect.bottom - margin) {
+            stage.scrollTop += (spanRect.bottom - stageRect.bottom) + margin;
+          }
+        }
+
+        setTimeout(revealNext, 500);
+        this.active = {
+          container,
+          allSpans,
+          revealTimer,
+          stop: () => {
+            isRevealing = false;
+            if (revealTimer) {
+              clearTimeout(revealTimer);
+              revealTimer = null;
+            }
+          }
+        };
+      },
+
+      close() {
+        if (this.active) {
+          if (this.active.stop) {
+            this.active.stop();
+          }
+          this.active = null;
+        }
+      }
+    };
+
+    // ============================================================
+    //  TRANSITION بين الورقة الأولى والثانية
+    // ============================================================
+    function transitionToSecondLetter() {
+      const nextBtn = document.getElementById('next-letter-btn');
+      if (nextBtn) nextBtn.remove();
+
+      Letters.close();
+
+      const paper = DOM.paper1;
+      paper.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+      paper.style.opacity = '0';
+      paper.style.transform = 'scale(0.96)';
+
+      setTimeout(() => {
+        paper.innerHTML = '';
+        paper.classList.add('paper-alt');
+
+        paper.style.opacity = '1';
+        paper.style.transform = 'scale(1)';
+
+        Utils.scrollToTop(DOM.letter1);
+
+        Letters.open(DOM.paper1, DATA.letter2, {
+          altStyle: true,
+          speed: CONFIG.wordDelay,
+          onDone: () => {
+            const btn = document.createElement('button');
+            btn.className = 'gift-btn';
+            btn.id = 'final-surprise-btn';
+            btn.style.display = 'inline-block';
+            btn.style.marginTop = '18px';
+            btn.textContent = 'آخر مفاجأة 🎁';
+            btn.addEventListener('click', () => {
+              StageManager.goTo('stage-rose');
+              Rose.init();
+            });
+            DOM.paper1.appendChild(btn);
+          }
+        });
+      }, 400);
+    }
+
+    // ============================================================
+    //  SONG
+    // ============================================================
+    const Song = {
+      lines: DATA.songLines,
+      active: false,
+      timer: null,
+
+      play(container, onDone) {
+        if (this.active) return;
+        this.active = true;
+        container.innerHTML = '';
+        const lineEls = this.lines.map((item) => {
+          const p = document.createElement('p');
+          p.className = 'song-line';
+          p.textContent = item.text;
+          p.dataset.time = item.time;
+          container.appendChild(p);
+          return p;
+        });
+
+        let currentIndex = -1;
+
+        const updateLine = (time) => {
+          let found = -1;
+          for (let i = this.lines.length - 1; i >= 0; i--) {
+            if (time >= this.lines[i].time) { found = i; break; }
+          }
+          if (found !== currentIndex) {
+            if (currentIndex >= 0 && lineEls[currentIndex]) {
+              lineEls[currentIndex].classList.remove('active');
+              lineEls[currentIndex].classList.add('sung');
+            }
+            currentIndex = found;
+            if (currentIndex >= 0 && lineEls[currentIndex]) {
+              lineEls[currentIndex].classList.add('active');
+              autoScrollToLine(lineEls[currentIndex]);
+            }
+          }
+        };
+
+        function autoScrollToLine(el) {
+          const stage = el.closest('.stage');
+          if (!stage) return;
+          const rect = stage.getBoundingClientRect();
+          const elRect = el.getBoundingClientRect();
+          if (elRect.bottom > rect.bottom - 40) {
+            stage.scrollTop += (elRect.bottom - rect.bottom) + 40;
+          }
+        }
+
+        // تشغيل الموسيقى
+        AudioManager.playBirthdaySong((currentTime) => {
+          updateLine(currentTime);
+        });
+
+        // مؤقت احتياطي
+        let lastTime = 0;
+        this.timer = setInterval(() => {
+          if (!AudioManager.isSongPlaying) {
+            lastTime += 0.5;
+            updateLine(lastTime);
+          }
+        }, 500);
+
+        const checkDone = () => {
+          if (this.active && currentIndex >= this.lines.length - 1) {
+            setTimeout(() => {
+              if (onDone) onDone();
+              this.stop();
+            }, 1500);
+          } else {
+            setTimeout(checkDone, 500);
+          }
+        };
+        setTimeout(checkDone, 2000);
+      },
+
+      stop() {
+        this.active = false;
+        AudioManager.stopBirthdaySong();
+        if (this.timer) clearInterval(this.timer);
+      },
+
+      reset() {
+        this.stop();
+        this.active = false;
+        DOM.songLyrics.innerHTML = '';
+        DOM.songBox.style.display = 'none';
+      }
+    };
+
+    // ============================================================
+    //  ROSE
+    // ============================================================
+    const Rose = {
+      opened: false,
+
+      init() {
+        DOM.roseWrap.addEventListener('click', () => this.bloom());
+      },
+
+      bloom() {
+        if (this.opened) return;
+        this.opened = true;
+
+        DOM.roseLabel.classList.add('hidden');
+
+        DOM.roseWrap.classList.add('bloom');
+        DOM.roseHint.style.opacity = '0';
+
+        Effects.sparkles(30);
+        Effects.confetti(70);
+        Effects.shake();
+
+        setTimeout(() => {
+          DOM.songBox.style.display = 'block';
+          Song.play(DOM.songLyrics, () => {
+            this.showFinalMessage();
+          });
+        }, 800);
+
+        let burstCount = 0;
+        const burstInterval = setInterval(() => {
+          if (burstCount > 3) { clearInterval(burstInterval); return; }
+          Effects.confetti(30);
+          Effects.sparkles(12);
+          burstCount++;
+        }, 1400);
+      },
+
+      showFinalMessage() {
+        const container = DOM.finalMsg;
+        Letters.open(
+          container,
+          DATA.finalMessage, {
+            speed: CONFIG.wordDelay,
+            onDone: () => {
+              setTimeout(() => {
+                DOM.finalTag.classList.add('show');
+                DOM.restartBtn.classList.add('show');
+              }, 600);
+            }
+          }
+        );
+      },
+
+      reset() {
+        this.opened = false;
+        DOM.roseLabel.classList.remove('hidden');
+        DOM.roseWrap.classList.remove('bloom');
+        DOM.roseHint.style.opacity = '1';
+        DOM.songBox.style.display = 'none';
+        DOM.finalMsg.innerHTML = '';
+        DOM.finalTag.classList.remove('show');
+        DOM.restartBtn.classList.remove('show');
+        Song.reset();
+      }
+    };
+
+    // ============================================================
+    //  NAVIGATION
+    // ============================================================
+    function setupNavigation() {
+      DOM.toLetter1.addEventListener('click', () => {
+        StageManager.goTo('stage-letter1', { scrollTop: true });
+
+        DOM.paper1.innerHTML = '';
+        DOM.paper1.classList.remove('paper-alt', 'leaving');
+        DOM.paper1.style.opacity = '1';
+        DOM.paper1.style.transform = 'scale(1)';
+
+        Letters.open(DOM.paper1, DATA.letter1, {
+          onDone: () => {
+            const btn = document.createElement('button');
+            btn.className = 'gift-btn';
+            btn.id = 'next-letter-btn';
+            btn.style.display = 'inline-block';
+            btn.style.marginTop = '18px';
+            btn.textContent = 'لسه في حاجة تانية 👀❤️';
+            btn.addEventListener('click', transitionToSecondLetter);
+            DOM.paper1.appendChild(btn);
+          }
+        });
+      });
+
+      DOM.restartBtn.addEventListener('click', () => {
+        if (confirm('إعادة الهدية من البداية؟')) {
+          restartAll();
+        }
+      });
+
+      DOM.patienceBtn.addEventListener('click', () => {
+        DOM.patienceBtn.textContent = 'طيب هستنى بس بسرعة 😂';
+      });
+
+      DOM.soundToggle.addEventListener('click', () => {
+        AudioManager.toggleMute();
+      });
+    }
+
+    // ============================================================
+    //  RESTART
+    // ============================================================
+    function restartAll() {
+      Countdown.destroy();
+      Song.stop();
+      Effects.clearAll();
+      StageManager.reset();
+      Letters.close();
+      Rose.reset();
+
+      DOM.paper1.innerHTML = '';
+      DOM.paper1.classList.remove('opening', 'leaving', 'paper-alt');
+      DOM.paper1.style.opacity = '1';
+      DOM.paper1.style.transform = 'scale(1)';
+
+      DOM.restartBtn.classList.remove('show');
+      DOM.celebText.classList.remove('reveal');
+      DOM.songBox.style.display = 'none';
+      DOM.songLyrics.innerHTML = '';
+      DOM.finalMsg.innerHTML = '';
+      DOM.finalTag.classList.remove('show');
+
+      Celebration.triggered = false;
+      Countdown.prev = { days: null, hours: null, minutes: null, seconds: null };
+      Countdown.done = false;
+      StageManager.goTo('stage-countdown');
+      Countdown.init();
+    }
+
+    // ============================================================
+    //  INIT
+    // ============================================================
+    function initApp() {
+      const once = () => {
+        AudioManager.init();
+        document.removeEventListener('click', once);
+        document.removeEventListener('touchstart', once);
+        document.removeEventListener('keydown', once);
+      };
+      document.addEventListener('click', once);
+      document.addEventListener('touchstart', once);
+      document.addEventListener('keydown', once);
+
+      Stars.init();
+      Countdown.init();
+      setupNavigation();
+    }
+
+    document.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>
